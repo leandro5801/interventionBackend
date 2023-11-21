@@ -26,17 +26,19 @@ export class UsuarioService {
   /**
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
-  findUsuarionById(idUsuario: number): Promise<Usuario> {
-    return this.usuarioRepository.findOneBy({ idUsuario });
+  findUsuarionById(id_usuario: number): Promise<Usuario> {
+    return this.usuarioRepository.findOneBy({ id_usuario });
   }
 
   /**
    * pasas un id por parametro y podras modificar la intervencion de dicho id
    */
-  updateUsuario(idUsuario: number, UsuarioDto: usuarioDto): Promise<Usuario> {
+  updateUsuario(id_usuario: number, UsuarioDto: usuarioDto): Promise<Usuario> {
     const usuario: Usuario = new Usuario();
-    usuario.idUsuario = UsuarioDto.idUsuario;
-    usuario.nombreUsuario = UsuarioDto.nombreUsuario;
+    usuario.id_usuario = id_usuario;
+    usuario.nombre_usuario = UsuarioDto.nombre_usuario;
+    usuario.contraseña = UsuarioDto.contraseña;
+    usuario.id_rol = UsuarioDto.id_rol;
     return this.usuarioRepository.save(usuario);
   }
 
@@ -48,8 +50,8 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 
 }*/
 
-  async deleteUsuario(idUsuario: number) {
-    return this.usuarioRepository.delete(idUsuario);
+  async deleteUsuario(id_usuario: number) {
+    return this.usuarioRepository.delete(id_usuario);
   }
 
   /*async filterAux(intervention: any): Promise<Intervencion[]>{

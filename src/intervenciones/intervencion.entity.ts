@@ -1,45 +1,32 @@
-import {
-  CreateDateColumn,
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
+import { Recomendacion } from 'src/recomendacion/recomendacion.entity';
 @Entity()
 export class Intervencion {
   @PrimaryGeneratedColumn()
-  idIntervencion: number;
+  id_intervencion: number;
 
   @Column()
-  nombreIntervencion: string;
+  nombre_intervencion: string;
 
   @Column()
-  descripcionIntervencion: string;
+  descripcion: string;
 
   @Column()
-  empresaIntervencion: string;
+  id_area: number;
 
   @Column()
-  uebIntervencion: string;
+  id_trabajador: number;
 
   @Column()
-  estructuraIntervencion: string;
+  id_proyecto: number;
 
   @Column()
-  areaIntervencion: string;
+  id_consultor: number;
 
-  @Column()
-  trabajadorIntervencion: string;
+  @Column({ type: 'date' })
+  start_date: Date;
 
-  @Column()
-  consultorIntervencion: string;
-
-  @CreateDateColumn()
-  startDateIntervencion: Date;
-
-  @CreateDateColumn()
-  endDateIntervencion: Date;
-
-  @Column()
-  progresoIntervencion: number;
+  @Column({ type: 'date' })
+  end_date: Date;
 }

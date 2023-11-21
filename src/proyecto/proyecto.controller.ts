@@ -31,17 +31,17 @@ export class ProyectoController {
   //return this.ProyectoService.findClienteById(+idCliente);
   //}
 
-  @Patch(':idProyecto')
+  @Patch(':id_proyecto')
   update(
-    @Param('idProyecto', ParseIntPipe) idProyecto: number,
+    @Param('id_proyecto', ParseIntPipe) id_proyecto: number,
     @Body() updateProyectoDto: proyectoDto,
   ) {
-    return this.ProyectoService.updateProyecto(+idProyecto, updateProyectoDto);
+    return this.ProyectoService.updateProyecto(+id_proyecto, updateProyectoDto);
   }
 
-  @Delete(':idProyecto')
-  deleteProyecto(@Param('idProyecto', ParseIntPipe) idProyecto: number) {
-    return this.ProyectoService.deleteProyecto(idProyecto);
+  @Delete(':id_proyecto')
+  deleteProyecto(@Param('id_proyecto', ParseIntPipe) id_proyecto: number) {
+    return this.ProyectoService.deleteProyecto(id_proyecto);
   }
 
   /* filter( interventionDTO: any){

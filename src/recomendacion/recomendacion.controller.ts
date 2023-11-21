@@ -32,10 +32,10 @@ export class recomendacionController {
 
   @Put(':idRecom')
   async updateRecom(
-    @Param('idRecom', ParseIntPipe) id: number,
+    @Param('idRecom', ParseIntPipe) idRecom: number,
     @Body() createRecomDto: recomendacionDto,
   ) {
-    return this.recomendacionService.updateRecom(id, createRecomDto);
+    return this.recomendacionService.updateRecom(idRecom, createRecomDto);
   }
 
   @Delete(':idRecom')

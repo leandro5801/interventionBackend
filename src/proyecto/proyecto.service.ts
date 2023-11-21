@@ -12,7 +12,7 @@ export class ProyectoService {
   ) {}
 
   async createProyecto(createProyecto: proyectoDto) {
-    const proyecto = this.proyectoRepository.create();
+    const proyecto = this.proyectoRepository.create(createProyecto);
     await this.proyectoRepository.save(proyecto);
     return proyecto;
   }
@@ -27,20 +27,23 @@ export class ProyectoService {
   /**
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
-  findProyectoById(idProyecto: number): Promise<Proyecto> {
-    return this.proyectoRepository.findOneBy({ idProyecto });
+  findProyectoById(id_proyecto: number): Promise<Proyecto> {
+    return this.proyectoRepository.findOneBy({ id_proyecto });
   }
 
   /**
    * pasas un id por parametro y podras modificar la intervencion de dicho id
    */
   updateProyecto(
-    idProyecto: number,
+    id_proyecto: number,
     ProyectoDto: proyectoDto,
   ): Promise<Proyecto> {
     const proyecto: Proyecto = new Proyecto();
-    proyecto.idProyecto = ProyectoDto.idProyecto;
-    proyecto.nombreProyecto = ProyectoDto.nombreProyecto;
+    proyecto.id_proyecto = id_proyecto;
+    proyecto.id_cliente = ProyectoDto.id_cliente;
+    proyecto.nombre_proyecto = ProyectoDto.nombre_proyecto;
+    proyecto.objetivos = ProyectoDto.objetivos;
+    proyecto.consultores_asignados_id = ProyectoDto.consultores_asignados_id;
     return this.proyectoRepository.save(proyecto);
   }
 
@@ -52,7 +55,7 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 
 }*/
 
-  async deleteProyecto(idProyecto: number) {
-    return this.proyectoRepository.delete(idProyecto);
+  async deleteProyecto(id_proyecto: number) {
+    return this.proyectoRepository.delete(id_proyecto);
   }
 }

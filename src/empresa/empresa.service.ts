@@ -39,7 +39,6 @@ export class EmpresaService {
     empresa.nombreEmpresa = EmpresaDto.nombreEmpresa;
     return this.empresaRepository.save(empresa);
   }
-
   /**
  * eliminar la intervencion del id que pases
  *

@@ -26,17 +26,17 @@ export class ClienteService {
   /**
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
-  findClientenById(idCliente: number): Promise<Cliente> {
-    return this.clienteRepository.findOneBy({ idCliente });
+  findClientenById(id_cliente: number): Promise<Cliente> {
+    return this.clienteRepository.findOneBy({ id_cliente });
   }
 
   /**
    * pasas un id por parametro y podras modificar la intervencion de dicho id
    */
-  updateCliente(idCliente: number, ClienteDto: clienteDto): Promise<Cliente> {
+  updateCliente(id_cliente: number, ClienteDto: clienteDto): Promise<Cliente> {
     const cliente: Cliente = new Cliente();
-    cliente.idCliente = ClienteDto.idCliente;
-    cliente.nombreCliente = ClienteDto.nombreCliente;
+    cliente.id_cliente = id_cliente;
+    cliente.nombre_cliente = ClienteDto.nombre_cliente;
     return this.clienteRepository.save(cliente);
   }
 
@@ -48,7 +48,7 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 
 }*/
 
-  async deleteCliente(idCliente: number) {
-    return this.clienteRepository.delete(idCliente);
+  async deleteCliente(id_cliente: number) {
+    return this.clienteRepository.delete(id_cliente);
   }
 }

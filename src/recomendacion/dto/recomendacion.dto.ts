@@ -1,10 +1,10 @@
 export class recomendacionDto {
-  readonly idIntervencion: number;
-  readonly idRecom: number;
-  readonly nombreRecom: string;
-  readonly nombreConsultRecom: string;
-  readonly descripRecom: string;
-  readonly fechaCreaRecom: Date;
-  readonly fechaFinRecom: Date;
+  readonly id_recomendacion: number;
+  readonly id_intervencion: number;
+  readonly nombre_recomendacion: string;
+  readonly id_consultor: number;
+  readonly id_clasificacion: number;
+  readonly descripcion_recomendacion: string;
+  readonly fecha_recomendacion: string;
   readonly seguimiento: boolean;
 }

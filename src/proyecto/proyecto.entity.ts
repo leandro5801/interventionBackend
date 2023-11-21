@@ -3,20 +3,17 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Proyecto {
   @PrimaryGeneratedColumn()
-  idProyecto: number;
+  id_proyecto: number;
 
   @Column()
-  idCliente: string;
+  id_cliente: number;
 
   @Column()
-  idConsultor: string;
-
-  @Column()
-  nombreProyecto: string;
+  nombre_proyecto: string;
 
   @Column()
   objetivos: string;
 
-  @Column()
-  consultores_asignados: string;
+  @Column('int', { array: true })
+  consultores_asignados_id: number[];
 }

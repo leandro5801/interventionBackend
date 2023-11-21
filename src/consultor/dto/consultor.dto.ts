@@ -1,5 +1,5 @@
 export class consultorDto {
-  readonly idProyecto: number;
-  readonly idConsultor: number;
-  readonly nombreConsultor: string;
+  readonly id_consultor: number;
+  readonly nombre_consultor: string;
+  readonly id_usuario: number;
 }

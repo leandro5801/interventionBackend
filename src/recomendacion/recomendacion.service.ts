@@ -20,28 +20,27 @@ export class recomendacionService {
     return await this.recomendacionRepository.find();
   }
 
-  async findOneRecom(idRecom: number) {
-    const found = await this.recomendacionRepository.findOne({
-      where: { idRecom },
-    });
-    if (!found) {
-      throw new NotFoundException(`Context with id ${idRecom} not found`);
-    }
-    return found;
+  async findOneRecom(id_recomendacion: number) {
+    return this.recomendacionRepository.findOneBy({ id_recomendacion });
   }
 
-  async updateRecom(idRecom: number, createRecomDto: recomendacionDto) {
-    if (await this.findOneRecom(idRecom)) {
-      await this.recomendacionRepository.update(idRecom, createRecomDto);
-      const RecomUpdate = await this.findOneRecom(idRecom);
-      return RecomUpdate;
-    }
+  async updateRecom(
+    id_recomendacion: number,
+    createRecomDto: recomendacionDto,
+  ) {
+    await this.recomendacionRepository.update(id_recomendacion, createRecomDto);
+    const RecomUpdate = await this.findOneRecom(id_recomendacion);
+    return RecomUpdate;
   }
 
-  async removeRecom(idRecom: number) {
-    const deleteRecom = await this.recomendacionRepository.delete(idRecom);
+  async removeRecom(id_recomendacion: number) {
+    const deleteRecom = await this.recomendacionRepository.delete(
+      id_recomendacion,
+    );
     if (!deleteRecom.affected) {
-      throw new NotFoundException(`Context with id ${idRecom} not found`);
+      throw new NotFoundException(
+        `Context with id ${id_recomendacion} not found`,
+      );
     }
   }
 }

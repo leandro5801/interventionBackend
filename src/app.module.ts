@@ -15,7 +15,7 @@ import { TrabajadorModule } from './trabajador/trabajador.module';
 import { UebModule } from './ueb/ueb.module';
 import { AreaModule } from './area/area.module';
 import { DireccionModule } from './direccion/direccion.module';
-import { Consultor } from './consultor/Consultor.entity';
+import { Consultor } from './consultor/consultor.entity';
 import { Usuario } from './usuario/usuario.entity';
 import { Cliente } from './cliente/cliente.entity';
 import { Empresa } from './empresa/empresa.entity';
@@ -25,6 +25,10 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { Proyecto } from './proyecto/proyecto.entity';
 import { ProyectoModule } from './proyecto/proyecto.module';
+import { RolModule } from './rol/rol.module';
+import { Rol } from './rol/rol.entity';
+import { Clasificacion } from './clasificacion/clasificacion.entity';
+import { ClasificacionModule } from './clasificacion/clasificacion.module';
 
 @Module({
   imports: [
@@ -37,6 +41,7 @@ import { ProyectoModule } from './proyecto/proyecto.module';
       entities: [
         Intervencion,
         Recomendacion,
+        Clasificacion,
         Trabajador,
         Direccion,
         Ueb,
@@ -45,6 +50,7 @@ import { ProyectoModule } from './proyecto/proyecto.module';
         Cliente,
         Empresa,
         Usuario,
+        Rol,
         Proyecto,
       ],
       database: 'bdIntervencion',
@@ -58,10 +64,12 @@ import { ProyectoModule } from './proyecto/proyecto.module';
     DireccionModule,
     TrabajadorModule,
     recomendacionModule,
+    ClasificacionModule,
     ProyectoModule,
     ConsultorModule,
     EmpresaModule,
     UsuarioModule,
+    RolModule,
   ],
   controllers: [AppController],
   providers: [AppService],

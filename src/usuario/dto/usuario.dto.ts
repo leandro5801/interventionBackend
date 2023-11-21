@@ -1,6 +1,6 @@
 export class usuarioDto {
-  readonly idUsuario: number;
-  readonly nombreUsuario: string;
+  readonly id_usuario: number;
+  readonly nombre_usuario: string;
   readonly contraseña: string;
-  readonly rol: string;
+  readonly id_rol: number;
 }

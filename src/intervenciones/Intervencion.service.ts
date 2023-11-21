@@ -26,18 +26,20 @@ export class IntervencionService {
   /**
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
-  findIntervencionById(idIntervencion: number): Promise<Intervencion> {
-    return this.intervencionRepository.findOneBy({ idIntervencion });
+  findIntervencionById(id_intervencion: number): Promise<Intervencion> {
+    return this.intervencionRepository.findOneBy({ id_intervencion });
   }
 
   /**
    * pasas un id por parametro y podras modificar la intervencion de dicho id
    */
   async updateIntervencion(
-    idIntervencion: number,
+    id_intervencion: number,
     IntervencionDto: IntervencionDto,
   ) {
-    await this.intervencionRepository.update(idIntervencion, IntervencionDto);
+    await this.intervencionRepository.update(id_intervencion, IntervencionDto);
+    const interUpdate = await this.findIntervencionById(id_intervencion);
+    return interUpdate;
   }
 
   /**
@@ -48,8 +50,8 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 
 }*/
 
-  async delete(idIntervencion: number) {
-    return this.intervencionRepository.delete(idIntervencion);
+  async delete(id_intervencion: number) {
+    return this.intervencionRepository.delete(id_intervencion);
   }
 
   /*async filterAux(intervention: any): Promise<Intervencion[]>{

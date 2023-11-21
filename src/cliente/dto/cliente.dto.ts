@@ -1,4 +1,5 @@
 export class clienteDto {
-  readonly idCliente: number;
-  readonly nombreCliente: string;
+  readonly id_cliente: number;
+  readonly nombre_cliente: string;
+  readonly id_usuario: number;
 }

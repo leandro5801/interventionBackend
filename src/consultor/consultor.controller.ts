@@ -26,30 +26,25 @@ export class ConsultorController {
     return this.ConsultorService.findAllConsultor();
   }
 
-  /*@Get(':idConsultor')
-     findOneById(@Param('idConsultor', ParseIntPipe) idConsultor: number) {
-       return this.ConsultorService.findConsultorById(+idConsultor);
-     }*/
-
-  @Patch(':idConsultor')
+  @Patch(':id_consultor')
   update(
-    @Param('idConsultor', ParseIntPipe) idConsultor: number,
+    @Param('id_consultor', ParseIntPipe) id_consultor: number,
     @Body() updateConsultorDto: consultorDto,
   ) {
     return this.ConsultorService.updateConsultor(
-      +idConsultor,
+      +id_consultor,
       updateConsultorDto,
     );
   }
 
-  @Delete(':idConsultor')
-  deleteConsultor(@Param('idConsultor', ParseIntPipe) idConsultor: number) {
-    return this.ConsultorService.deleteConsultor(idConsultor);
+  @Delete(':id_consultor')
+  deleteConsultor(@Param('id_consultor', ParseIntPipe) id_consultor: number) {
+    return this.ConsultorService.deleteConsultor(id_consultor);
   }
 
   /* filter( interventionDTO: any){
-         console.log(interventionDTO);
-       return this.IntervencionService.filterAux(interventionDTO);  
-     } 
-  */
+           console.log(interventionDTO);
+         return this.IntervencionService.filterAux(interventionDTO);  
+       } 
+    */
 }

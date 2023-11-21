@@ -1,32 +1,29 @@
-import {
-  CreateDateColumn,
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Intervencion } from 'src/intervenciones/intervencion.entity';
 
 @Entity()
 export class Recomendacion {
   @PrimaryGeneratedColumn()
-  idIntervencion: number;
-
-  @PrimaryGeneratedColumn()
-  idRecom: number;
+  id_recomendacion: number;
 
   @Column()
-  nombreRecom: string;
+  id_intervencion: number;
 
   @Column()
-  nombreConsultRecom: string;
+  nombre_recomendacion: string;
 
   @Column()
-  descripRecom: string;
+  id_consultor: number;
 
-  @CreateDateColumn()
-  fechaCreaRecom: Date;
+  @Column()
+  id_clasificacion: number;
 
-  @CreateDateColumn()
-  fechaFinRecom: Date;
+  @Column()
+  descripcion_recomendacion: string;
+
+  @Column({ type: 'date' })
+  fecha_recomendacion: Date;
 
   @Column()
   seguimiento: boolean;

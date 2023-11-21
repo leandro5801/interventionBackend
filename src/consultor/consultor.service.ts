@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Consultor } from './Consultor.entity';
+import { Consultor } from './consultor.entity';
 import { Repository } from 'typeorm';
-import { consultorDto } from './dto/Consultor.dto';
+import { consultorDto } from './dto/consultor.dto';
 
 @Injectable()
 export class ConsultorService {
@@ -26,20 +26,20 @@ export class ConsultorService {
   /**
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
-  findConsultornById(idConsultor: number): Promise<Consultor> {
-    return this.consultorRepository.findOneBy({ idConsultor });
+  findConsultorById(id_consultor: number): Promise<Consultor> {
+    return this.consultorRepository.findOneBy({ id_consultor });
   }
 
   /**
    * pasas un id por parametro y podras modificar la intervencion de dicho id
    */
   updateConsultor(
-    idConsultor: number,
+    id_consultor: number,
     ConsultorDto: consultorDto,
   ): Promise<Consultor> {
     const consultor: Consultor = new Consultor();
-    consultor.idConsultor = ConsultorDto.idConsultor;
-    consultor.nombreConsultor = ConsultorDto.nombreConsultor;
+    consultor.id_consultor = id_consultor;
+    consultor.nombre_consultor = ConsultorDto.nombre_consultor;
     return this.consultorRepository.save(consultor);
   }
 
@@ -51,59 +51,7 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 
 }*/
 
-  async deleteConsultor(idConsultor: number) {
-    return this.consultorRepository.delete(idConsultor);
+  async deleteConsultor(id_consultor: number) {
+    return this.consultorRepository.delete(id_consultor);
   }
-
-  /*async filterAux(intervention: any): Promise<Intervencion[]>{
-  if (Intervencion.startDate){
-  if(IntervencionDto.endDate){
-   return await this.intervencionRepository.find(
-     {IntervencionDto,
-       startDate:{
-         $gte: intervencionDto.startDate,
-         $lt: IntervencionDto.endDate
-       },
-       endDate:{
-         $gte: IntervencionDto.startDate,
-         $lt: IntervencionDto.endDate
-       }
-     })
-     console.log(interventionDTO.endDate);
-   }
-
-     else{
-   return await this.intervencionRepository.find(
-     {IntervencionDto,
-       startDate:{
-         $gte: intervencionDto.startDate,
-      //   $lt: ""
-       },
-       endDate:{
-         $gte: intervencionDto.startDate,
-       //  $lt: ""
-       }
-     })}
-  }
-
-  else{
-   return await this.intervencionRepository.find(interventionDTO);}
- }*/
-
-  /*
-
-  async update(id: string, createdIntervencionDto: IntervencionDTO) {
-    if (await this.findOne(id)) {
-      await this.intervencionRepository.update(id, createIntervenDto);
-      const intervenUpdate = await this.findOne(id);
-      return intervenUpdate;
-    }
-  }
-
-  async remove(id: number) {
-    const deleteInterven = await this.intervencionRepository.delete(id);
-    if (!deleteInterven.affected) {
-      throw new NotFoundException(`Context with id ${id} not found`);
-    }
-  }*/
 }
