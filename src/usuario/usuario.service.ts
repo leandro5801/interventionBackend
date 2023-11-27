@@ -31,6 +31,13 @@ export class UsuarioService {
   }
 
   /**
+   * se pasa un nombre por parametro y esta funcion devuelve la intervencion con el id
+   */
+  findUsuarioByNombre(nombre_usuario: string): Promise<Usuario> {
+    return this.usuarioRepository.findOneBy({ nombre_usuario });
+  }
+
+  /**
    * pasas un id por parametro y podras modificar la intervencion de dicho id
    */
   updateUsuario(id_usuario: number, UsuarioDto: usuarioDto): Promise<Usuario> {

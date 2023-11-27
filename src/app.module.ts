@@ -1,3 +1,4 @@
+import { AutenticacionModule } from './autenticacion/autenticacion.module';
 import { Module } from '@nestjs/common';
 import { IntervencionModule } from './intervenciones/Intervencion.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -16,19 +17,19 @@ import { UebModule } from './ueb/ueb.module';
 import { AreaModule } from './area/area.module';
 import { DireccionModule } from './direccion/direccion.module';
 import { Consultor } from './consultor/consultor.entity';
-import { Usuario } from './usuario/usuario.entity';
-import { Cliente } from './cliente/cliente.entity';
 import { Empresa } from './empresa/empresa.entity';
 import { ConsultorModule } from './consultor/consultor.module';
 import { EmpresaModule } from './empresa/empresa.module';
 import { UsuarioModule } from './usuario/usuario.module';
-import { ClienteModule } from './cliente/cliente.module';
+import { Usuario } from './usuario/usuario.entity';
 import { Proyecto } from './proyecto/proyecto.entity';
 import { ProyectoModule } from './proyecto/proyecto.module';
 import { RolModule } from './rol/rol.module';
 import { Rol } from './rol/rol.entity';
 import { Clasificacion } from './clasificacion/clasificacion.entity';
 import { ClasificacionModule } from './clasificacion/clasificacion.module';
+import { ClienteModule } from './cliente/cliente.module';
+import { Cliente } from './cliente/cliente.entity';
 
 @Module({
   imports: [
@@ -57,8 +58,9 @@ import { ClasificacionModule } from './clasificacion/clasificacion.module';
       synchronize: true,
       logging: true,
     }),
-    ClienteModule,
+
     IntervencionModule,
+    ClienteModule,
     UebModule,
     AreaModule,
     DireccionModule,
@@ -68,6 +70,7 @@ import { ClasificacionModule } from './clasificacion/clasificacion.module';
     ProyectoModule,
     ConsultorModule,
     EmpresaModule,
+    AutenticacionModule,
     UsuarioModule,
     RolModule,
   ],
