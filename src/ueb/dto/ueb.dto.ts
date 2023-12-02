@@ -1,5 +1,5 @@
 export class uebDto {
-  readonly idUeb: number;
-  readonly nombreUeb: string;
-  readonly idEmpresa: number;
+  readonly id_ueb: number;
+  readonly nombre_ueb: string;
+  readonly id_empresa: number;
 }

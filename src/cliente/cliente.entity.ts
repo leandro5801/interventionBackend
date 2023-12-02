@@ -8,6 +8,6 @@ export class Cliente {
   @Column()
   nombre_cliente: string;
 
-  @Column()
-  id_usuario: number;
+  @Column({ nullable: true })
+  id_usuario?: number;
 }

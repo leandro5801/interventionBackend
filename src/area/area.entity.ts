@@ -3,11 +3,11 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Area {
   @PrimaryGeneratedColumn()
-  idArea: number;
+  id_area: number;
 
   @Column()
-  idDireccion: number;
+  id_direccion: number;
 
   @Column()
-  nombreArea: string;
+  nombre_area: string;
 }

@@ -37,6 +37,7 @@ export class ClienteService {
     const cliente: Cliente = new Cliente();
     cliente.id_cliente = id_cliente;
     cliente.nombre_cliente = ClienteDto.nombre_cliente;
+    cliente.id_usuario = ClienteDto.id_usuario;
     return this.clienteRepository.save(cliente);
   }
 

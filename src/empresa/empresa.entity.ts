@@ -3,8 +3,11 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Empresa {
   @PrimaryGeneratedColumn()
-  idEmpresa: number;
+  id_empresa: number;
 
   @Column()
-  nombreEmpresa: string;
+  nombre_empresa: string;
+
+  @Column()
+  cargar_empresa: boolean;
 }

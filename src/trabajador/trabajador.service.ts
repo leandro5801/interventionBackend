@@ -27,7 +27,7 @@ export class TrabajadorService {
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
   findTrabajadorById(idTrabajador: number): Promise<Trabajador> {
-    return this.trabajadorRepository.findOneBy({ idTrabajador });
+    return this.trabajadorRepository.findOneBy({ id_trabajador: idTrabajador });
   }
 
   /**
@@ -38,9 +38,9 @@ export class TrabajadorService {
     TrabajadorDto: trabajadorDto,
   ): Promise<Trabajador> {
     const trabajador: Trabajador = new Trabajador();
-    trabajador.idTrabajador = idTrabajador;
-    trabajador.nombreTrabajador = TrabajadorDto.nombreTrabajador;
-    trabajador.idArea = TrabajadorDto.idArea;
+    trabajador.id_trabajador = idTrabajador;
+    trabajador.nombre_trabajador = TrabajadorDto.nombre_trabajador;
+    trabajador.id_area = TrabajadorDto.id_area;
     return this.trabajadorRepository.save(trabajador);
   }
 

@@ -12,6 +12,7 @@ export class EmpresaService {
   ) {}
 
   async createEmpresa(EmpresaDto: empresaDto) {
+    console.log(EmpresaDto);
     const empresa = this.empresaRepository.create(EmpresaDto);
     await this.empresaRepository.save(empresa);
     return empresa;
@@ -27,7 +28,7 @@ export class EmpresaService {
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
   findEmpresaById(idEmpresa: number): Promise<Empresa> {
-    return this.empresaRepository.findOneBy({ idEmpresa });
+    return this.empresaRepository.findOneBy({ id_empresa: idEmpresa });
   }
 
   /**
@@ -35,8 +36,9 @@ export class EmpresaService {
    */
   updateEmpresa(idEmpresa: number, EmpresaDto: empresaDto): Promise<Empresa> {
     const empresa: Empresa = new Empresa();
-    empresa.idEmpresa = idEmpresa;
-    empresa.nombreEmpresa = EmpresaDto.nombreEmpresa;
+    empresa.id_empresa = idEmpresa;
+    empresa.nombre_empresa = EmpresaDto.nombre_empresa;
+    empresa.cargar_empresa = EmpresaDto.cargar_empresa;
     return this.empresaRepository.save(empresa);
   }
   /**

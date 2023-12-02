@@ -26,7 +26,7 @@ export class AreaService {
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
   findAreaById(idArea: number): Promise<Area> {
-    return this.areaRepository.findOneBy({ idArea });
+    return this.areaRepository.findOneBy({ id_area: idArea });
   }
 
   /**
@@ -34,9 +34,9 @@ export class AreaService {
    */
   updateArea(idArea: number, AreaDto: areaDto): Promise<Area> {
     const area: Area = new Area();
-    area.idArea = idArea;
-    area.nombreArea = AreaDto.nombreArea;
-    area.idDireccion = AreaDto.idDireccion;
+    area.id_area = idArea;
+    area.nombre_area = AreaDto.nombre_area;
+    area.id_direccion = AreaDto.id_direccion;
     return this.areaRepository.save(area);
   }
 

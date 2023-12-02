@@ -27,7 +27,7 @@ export class DireccionService {
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
   findDireccionById(idDireccion: number): Promise<Direccion> {
-    return this.direccionRepository.findOneBy({ idDireccion });
+    return this.direccionRepository.findOneBy({ id_direccion: idDireccion });
   }
 
   /**
@@ -38,9 +38,9 @@ export class DireccionService {
     DireccionDto: direccionDto,
   ): Promise<Direccion> {
     const direccion: Direccion = new Direccion();
-    direccion.idDireccion = idDireccion;
-    direccion.nombreDireccion = DireccionDto.nombreDireccion;
-    direccion.idUeb = DireccionDto.idUeb;
+    direccion.id_direccion = idDireccion;
+    direccion.nombre_direccion = DireccionDto.nombre_direccion;
+    direccion.id_ueb = DireccionDto.id_ueb;
     return this.direccionRepository.save(direccion);
   }
 

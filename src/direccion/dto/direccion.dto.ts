@@ -1,5 +1,5 @@
 export class direccionDto {
-  readonly idDireccion: number;
-  readonly nombreDireccion: string;
-  readonly idUeb: number;
+  readonly id_direccion: number;
+  readonly nombre_direccion: string;
+  readonly id_ueb: number;
 }

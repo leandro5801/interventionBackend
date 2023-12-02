@@ -1,5 +1,5 @@
 export class areaDto {
-  readonly idArea: number;
-  readonly nombreArea: string;
-  readonly idDireccion: number;
+  readonly id_area: number;
+  readonly nombre_area: string;
+  readonly id_direccion: number;
 }

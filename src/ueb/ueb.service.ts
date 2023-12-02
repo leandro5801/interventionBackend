@@ -26,7 +26,7 @@ export class UebService {
    * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
    */
   findUebById(idUeb: number): Promise<Ueb> {
-    return this.uebRepository.findOneBy({ idUeb });
+    return this.uebRepository.findOneBy({ id_ueb: idUeb });
   }
 
   /**
@@ -34,9 +34,9 @@ export class UebService {
    */
   updateUeb(idUeb: number, UebDto: uebDto): Promise<Ueb> {
     const ueb: Ueb = new Ueb();
-    ueb.idUeb = idUeb;
-    ueb.nombreUeb = UebDto.nombreUeb;
-    ueb.idEmpresa = UebDto.idEmpresa;
+    ueb.id_ueb = idUeb;
+    ueb.nombre_ueb = UebDto.nombre_ueb;
+    ueb.id_empresa = UebDto.id_empresa;
     return this.uebRepository.save(ueb);
   }
 

@@ -17,6 +17,7 @@ export class AutenticacionService {
     const payload = { user };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      user: user,
     };
   }
   async getProfile(token: string): Promise<any> {

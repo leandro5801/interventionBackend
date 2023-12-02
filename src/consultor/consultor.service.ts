@@ -40,6 +40,7 @@ export class ConsultorService {
     const consultor: Consultor = new Consultor();
     consultor.id_consultor = id_consultor;
     consultor.nombre_consultor = ConsultorDto.nombre_consultor;
+    consultor.id_usuario = ConsultorDto.id_usuario;
     return this.consultorRepository.save(consultor);
   }
 

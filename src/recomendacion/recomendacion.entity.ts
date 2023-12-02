@@ -1,7 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Intervencion } from 'src/intervenciones/intervencion.entity';
-
 @Entity()
 export class Recomendacion {
   @PrimaryGeneratedColumn()

@@ -8,6 +8,6 @@ export class Consultor {
   @Column()
   nombre_consultor: string;
 
-  @Column()
-  id_usuario: number;
+  @Column({ nullable: true })
+  id_usuario?: number;
 }

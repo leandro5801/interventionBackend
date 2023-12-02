@@ -1,4 +1,5 @@
 export class empresaDto {
-  readonly idEmpresa: number;
-  readonly nombreEmpresa: string;
+  readonly id_empresa: number;
+  readonly nombre_empresa: string;
+  readonly cargar_empresa: boolean;
 }
