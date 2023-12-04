@@ -43,7 +43,10 @@ export class UebController {
   deleteArea(@Param('idUeb', ParseIntPipe) idUeb: number) {
     return this.UebService.deleteUeb(idUeb);
   }
-
+  @Get('/ueb')
+  fetchDataFromApi() {
+    return this.UebService.fetchUebFromApi();
+  }
   /* filter( interventionDTO: any){
          console.log(interventionDTO);
        return this.IntervencionService.filterAux(interventionDTO);  

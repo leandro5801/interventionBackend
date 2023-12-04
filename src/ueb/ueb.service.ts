@@ -3,11 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Ueb } from './ueb.entity';
 import { Repository } from 'typeorm';
 import { uebDto } from './dto/ueb.dto';
+import axios from 'axios';
+import { EmpresaService } from '../empresa/empresa.service';
 
 @Injectable()
 export class UebService {
   constructor(
     @InjectRepository(Ueb) private readonly uebRepository: Repository<Ueb>,
+    private empresaService: EmpresaService,
   ) {}
 
   async createUeb(createUeb: uebDto) {
@@ -28,6 +31,9 @@ export class UebService {
   findUebById(idUeb: number): Promise<Ueb> {
     return this.uebRepository.findOneBy({ id_ueb: idUeb });
   }
+  findUebByName(nombreUeb: string): Promise<Ueb> {
+    return this.uebRepository.findOneBy({ nombre_ueb: nombreUeb });
+  }
 
   /**
    * pasas un id por parametro y podras modificar la intervencion de dicho id
@@ -40,15 +46,26 @@ export class UebService {
     return this.uebRepository.save(ueb);
   }
 
-  /**
- * eliminar la intervencion del id que pases
- *
-removeIntervencion(id: number): Promise<{ affected?: number }> {
-  return this.intervencionRepository.delete(id); 
-
-}*/
-
   async deleteUeb(idUeb: number) {
     return this.uebRepository.delete(idUeb);
+  }
+
+  async fetchUebFromApi() {
+    const response = await axios.get('http://localhost:3005/test/ueb');
+    const data = response.data;
+    const filteredData: { nombre_ueb: string; id_empresa: number }[] = [];
+    for (const item of data) {
+      const empresa = await this.empresaService.findEmpresaByName(item.entidad);
+      if (empresa) {
+        filteredData.push({
+          nombre_ueb: item.nombre,
+          id_empresa: empresa.id_empresa,
+        });
+      } else {
+        console.log('NO hay empresa');
+      }
+    }
+    await this.uebRepository.save(filteredData);
+    return this.uebRepository.find();
   }
 }

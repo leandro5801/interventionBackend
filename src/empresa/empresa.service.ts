@@ -12,10 +12,18 @@ export class EmpresaService {
   ) {}
 
   async createEmpresa(EmpresaDto: empresaDto) {
-    console.log(EmpresaDto);
+    // if (!EmpresaDto.cargar_empresa) {
     const empresa = this.empresaRepository.create(EmpresaDto);
     await this.empresaRepository.save(empresa);
     return empresa;
+    // } else {
+    //   const empresa = this.empresaRepository.create({
+    //     nombre_empresa: 'AICA+',
+    //     cargar_empresa: true,
+    //   });
+    //   await this.empresaRepository.save(empresa);
+    //   return empresa;
+    // }
   }
   /**
    *retorna un arreglo de todas las intervenciones
@@ -31,6 +39,9 @@ export class EmpresaService {
     return this.empresaRepository.findOneBy({ id_empresa: idEmpresa });
   }
 
+  findEmpresaByName(nombreEmpresa: string): Promise<Empresa> {
+    return this.empresaRepository.findOneBy({ nombre_empresa: nombreEmpresa });
+  }
   /**
    * pasas un id por parametro y podras modificar la intervencion de dicho id
    */

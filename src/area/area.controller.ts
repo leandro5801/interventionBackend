@@ -49,4 +49,8 @@ export class AreaController {
        return this.IntervencionService.filterAux(interventionDTO);  
      } 
   */
+  @Get('/area')
+  getAreaApi() {
+    return this.AreaService.fetchAreaFromApi();
+  }
 }

@@ -3,11 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Area } from './area.entity';
 import { Repository } from 'typeorm';
 import { areaDto } from './dto/area.dto';
+import { DireccionService } from 'src/direccion/direccion.service';
+import axios from 'axios';
 
 @Injectable()
 export class AreaService {
   constructor(
     @InjectRepository(Area) private readonly areaRepository: Repository<Area>,
+    private direccionService: DireccionService,
   ) {}
 
   async createArea(createArea: areaDto) {
@@ -27,6 +30,10 @@ export class AreaService {
    */
   findAreaById(idArea: number): Promise<Area> {
     return this.areaRepository.findOneBy({ id_area: idArea });
+  }
+
+  findAreaByName(nombreArea: string): Promise<Area> {
+    return this.areaRepository.findOneBy({ nombre_area: nombreArea });
   }
 
   /**
@@ -51,56 +58,49 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
   async deleteArea(idArea: number) {
     return this.areaRepository.delete(idArea);
   }
+  // async fetchAreaFromApi() {
+  //   const response = await axios.get(
+  //     'http://localhost:3005/test/direccionArea',
+  //   );
+  //   const data = response.data;
 
-  /*async filterAux(intervention: any): Promise<Intervencion[]>{
-  if (Intervencion.startDate){
-  if(IntervencionDto.endDate){
-   return await this.intervencionRepository.find(
-     {IntervencionDto,
-       startDate:{
-         $gte: intervencionDto.startDate,
-         $lt: IntervencionDto.endDate
-       },
-       endDate:{
-         $gte: IntervencionDto.startDate,
-         $lt: IntervencionDto.endDate
-       }
-     })
-     console.log(interventionDTO.endDate);
-   }
-
-     else{
-   return await this.intervencionRepository.find(
-     {IntervencionDto,
-       startDate:{
-         $gte: intervencionDto.startDate,
-      //   $lt: ""
-       },
-       endDate:{
-         $gte: intervencionDto.startDate,
-       //  $lt: ""
-       }
-     })}
-  }
-
-  else{
-   return await this.intervencionRepository.find(interventionDTO);}
- }*/
-
-  /*
-
-  async update(id: string, createdIntervencionDto: IntervencionDTO) {
-    if (await this.findOne(id)) {
-      await this.intervencionRepository.update(id, createIntervenDto);
-      const intervenUpdate = await this.findOne(id);
-      return intervenUpdate;
+  //   const filteredData: { nombre_area: string; id_direccion: number }[] = [];
+  //   console.log(data);
+  //   Object.keys(data).forEach((objKey) => {
+  //     const direccion = data[objKey];
+  //     Object.keys(direccion.Area).forEach((dirKey) => {
+  //       const direccion = await this.direccionService.findDireccionByName(direccion.Unidad[dirKey]);
+  //       const areaObj = direccion.Area[dirKey];
+  //       console.log(areaObj.Area);
+  //       filteredData.push({ nombre_area: areaObj.Area, id_direccion: 1 });
+  //     });
+  //   });
+  //   await this.areaRepository.save(filteredData);
+  // }
+  async fetchAreaFromApi() {
+    const response = await axios.get(
+      'http://localhost:3005/test/direccionArea',
+    );
+    const data = response.data;
+    const filteredData: { nombre_area: string; id_direccion: number }[] = [];
+    for (const objKey of Object.keys(data)) {
+      const direccion = data[objKey];
+      for (const dirKey of Object.keys(direccion.Area)) {
+        const direccionn = await this.direccionService.findDireccionByName(
+          data[objKey].Unidad.trim(),
+        );
+        const areaObj = direccion.Area[dirKey];
+        if (direccionn) {
+          filteredData.push({
+            nombre_area: areaObj.Area,
+            id_direccion: direccionn.id_direccion,
+          });
+        } else {
+          console.log('NO hay direcciones');
+        }
+      }
     }
+    await this.areaRepository.save(filteredData);
+    return this.areaRepository.find();
   }
-
-  async remove(id: number) {
-    const deleteInterven = await this.intervencionRepository.delete(id);
-    if (!deleteInterven.affected) {
-      throw new NotFoundException(`Context with id ${id} not found`);
-    }
-  }*/
 }

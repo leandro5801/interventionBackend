@@ -52,4 +52,8 @@ export class DireccionController {
        return this.IntervencionService.filterAux(interventionDTO);  
      } 
   */
+  @Get('/direccion')
+  getDireccion() {
+    return this.DireccionService.fetchDireccionFromApi();
+  }
 }

@@ -52,4 +52,8 @@ export class TrabajadorController {
        return this.IntervencionService.filterAux(interventionDTO);  
      } 
   */
+  @Get('/trabajadores')
+  fetchDataFromApi() {
+    return this.TrabajadorService.fetchTrabajadorFromApi();
+  }
 }

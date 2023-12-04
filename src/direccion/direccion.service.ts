@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Direccion } from './direccion.entity';
 import { Repository } from 'typeorm';
 import { direccionDto } from './dto/direccion.dto';
-
+import axios from 'axios';
+import { UebService } from 'src/ueb/ueb.service';
 @Injectable()
 export class DireccionService {
   constructor(
     @InjectRepository(Direccion)
     private readonly direccionRepository: Repository<Direccion>,
+    private uebService: UebService,
   ) {}
 
   async createDireccion(createDireccion: direccionDto) {
@@ -28,6 +30,11 @@ export class DireccionService {
    */
   findDireccionById(idDireccion: number): Promise<Direccion> {
     return this.direccionRepository.findOneBy({ id_direccion: idDireccion });
+  }
+  findDireccionByName(nombreDireccion: string): Promise<Direccion> {
+    return this.direccionRepository.findOneBy({
+      nombre_direccion: nombreDireccion,
+    });
   }
 
   /**
@@ -54,5 +61,18 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 
   async deleteDireccion(idDireccion: number) {
     return this.direccionRepository.delete(idDireccion);
+  }
+
+  async fetchDireccionFromApi() {
+    const response = await axios.get(
+      'http://localhost:3005/test/direccionArea',
+    );
+    const data = response.data;
+    const filteredData = Object.keys(data).map((key) => ({
+      nombre_direccion: data[key].Unidad.trim(),
+      id_ueb: 1,
+    }));
+    await this.direccionRepository.save(filteredData);
+    return this.direccionRepository.find();
   }
 }

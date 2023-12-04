@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Trabajador } from './trabajador.entity';
 import { Repository } from 'typeorm';
 import { trabajadorDto } from './dto/trabajador.dto';
+import { AreaService } from 'src/area/area.service';
+import axios from 'axios';
 
 @Injectable()
 export class TrabajadorService {
   constructor(
     @InjectRepository(Trabajador)
     private readonly trabajadorRepository: Repository<Trabajador>,
+    private areaService: AreaService,
   ) {}
 
   async createTrabajador(createTrabajador: trabajadorDto) {
@@ -54,5 +57,26 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 
   async deleteTrabajador(idTrabajador: number) {
     return this.trabajadorRepository.delete(idTrabajador);
+  }
+  async fetchTrabajadorFromApi() {
+    const response = await axios.get('http://localhost:3005/test/trabajadores');
+    const data = response.data;
+
+    const filteredData: { nombre_trabajador: string; id_area: number }[] = [];
+    for (const item of data) {
+      const area = await this.areaService.findAreaByName(item.AREA);
+      item.Trabajador.forEach((trabajador) => {
+        if (area) {
+          filteredData.push({
+            nombre_trabajador: trabajador.NOMBRE,
+            id_area: area.id_area,
+          });
+        } else {
+          console.log('NO hay area');
+        }
+      });
+    }
+    await this.trabajadorRepository.save(filteredData);
+    return this.trabajadorRepository.find();
   }
 }
