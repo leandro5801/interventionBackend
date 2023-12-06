@@ -77,12 +77,20 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
   //   });
   //   await this.areaRepository.save(filteredData);
   // }
-  async fetchAreaFromApi() {
+  async fetchAreaFromApi(
+    nombreEmpresa: string,
+    nombreUeb: string,
+    nombreDireccion: string,
+  ) {
     const response = await axios.get(
       'http://localhost:3005/test/direccionArea',
     );
     const data = response.data;
-    const filteredData: { nombre_area: string; id_direccion: number }[] = [];
+    const processedData: {
+      id_area?: number;
+      nombre_area: string;
+      id_direccion: number;
+    }[] = [];
     for (const objKey of Object.keys(data)) {
       const direccion = data[objKey];
       for (const dirKey of Object.keys(direccion.Area)) {
@@ -91,16 +99,26 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
         );
         const areaObj = direccion.Area[dirKey];
         if (direccionn) {
-          filteredData.push({
-            nombre_area: areaObj.Area,
-            id_direccion: direccionn.id_direccion,
+          let area = await this.areaRepository.findOne({
+            where: { nombre_area: areaObj.Area },
           });
+          if (area) {
+            area.nombre_area = areaObj.Area;
+            area.id_direccion = direccionn.id_direccion;
+          } else {
+            area = {
+              id_area: undefined, // Aquí es donde agregamos la propiedad id_area
+              nombre_area: areaObj.Area,
+              id_direccion: direccionn.id_direccion,
+            };
+          }
+          processedData.push(area);
         } else {
           console.log('NO hay direcciones');
         }
       }
     }
-    await this.areaRepository.save(filteredData);
+    await this.areaRepository.save(processedData);
     return this.areaRepository.find();
   }
 }

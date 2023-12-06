@@ -53,7 +53,10 @@ export class DireccionController {
      } 
   */
   @Get('/direccion')
-  getDireccion() {
-    return this.DireccionService.fetchDireccionFromApi();
+  getDireccion(nombreEmpresa: string, nombreUeb: string) {
+    return this.DireccionService.fetchDireccionFromApi(
+      nombreEmpresa,
+      nombreUeb,
+    );
   }
 }

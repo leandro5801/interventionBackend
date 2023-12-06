@@ -63,16 +63,33 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
     return this.direccionRepository.delete(idDireccion);
   }
 
-  async fetchDireccionFromApi() {
+  async fetchDireccionFromApi(nombreEmpresa: string, nombreUeb: string) {
     const response = await axios.get(
       'http://localhost:3005/test/direccionArea',
     );
     const data = response.data;
-    const filteredData = Object.keys(data).map((key) => ({
-      nombre_direccion: data[key].Unidad.trim(),
-      id_ueb: 1,
-    }));
-    await this.direccionRepository.save(filteredData);
+    const processedData: {
+      id_direccion?: number;
+      nombre_direccion: string;
+      id_ueb: number;
+    }[] = [];
+    for (const key in data) {
+      let direccion = await this.direccionRepository.findOne({
+        where: { nombre_direccion: data[key].Unidad.trim() },
+      });
+      if (direccion) {
+        direccion.nombre_direccion = data[key].Unidad.trim();
+        direccion.id_ueb = 1; // Aquí deberías buscar la UEB correcta en lugar de usar un valor fijo
+      } else {
+        direccion = {
+          id_direccion: undefined, // Aquí es donde agregamos la propiedad id_direccion
+          nombre_direccion: data[key].Unidad.trim(),
+          id_ueb: 1, // Aquí deberías buscar la UEB correcta en lugar de usar un valor fijo
+        };
+      }
+      processedData.push(direccion);
+    }
+    await this.direccionRepository.save(processedData);
     return this.direccionRepository.find();
   }
 }

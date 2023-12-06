@@ -44,8 +44,8 @@ export class UebController {
     return this.UebService.deleteUeb(idUeb);
   }
   @Get('/ueb')
-  fetchDataFromApi() {
-    return this.UebService.fetchUebFromApi();
+  fetchDataFromApi(idEmpresa: number, nombreEmpresa: string) {
+    return this.UebService.fetchUebFromApi(idEmpresa, nombreEmpresa);
   }
   /* filter( interventionDTO: any){
          console.log(interventionDTO);

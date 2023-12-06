@@ -50,22 +50,37 @@ export class UebService {
     return this.uebRepository.delete(idUeb);
   }
 
-  async fetchUebFromApi() {
+  async fetchUebFromApi(idEmpresa: number, nombreEmpresa: string) {
     const response = await axios.get('http://localhost:3005/test/ueb');
     const data = response.data;
-    const filteredData: { nombre_ueb: string; id_empresa: number }[] = [];
+    const processedData: {
+      id_ueb?: number;
+      nombre_ueb: string;
+      id_empresa: number;
+    }[] = [];
     for (const item of data) {
       const empresa = await this.empresaService.findEmpresaByName(item.entidad);
       if (empresa) {
-        filteredData.push({
-          nombre_ueb: item.nombre,
-          id_empresa: empresa.id_empresa,
+        let ueb = await this.uebRepository.findOne({
+          where: { nombre_ueb: item.nombre },
         });
+
+        if (ueb) {
+          ueb.nombre_ueb = item.nombre;
+          ueb.id_empresa = empresa.id_empresa;
+        } else {
+          ueb = {
+            id_ueb: undefined, // Aquí es donde agregamos la propiedad id_ueb
+            nombre_ueb: item.nombre,
+            id_empresa: empresa.id_empresa,
+          };
+        }
+        processedData.push(ueb);
       } else {
-        console.log('NO hay empresa');
+        console.log('No hay empresa');
       }
     }
-    await this.uebRepository.save(filteredData);
+    await this.uebRepository.save(processedData);
     return this.uebRepository.find();
   }
 }

@@ -58,25 +58,43 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
   async deleteTrabajador(idTrabajador: number) {
     return this.trabajadorRepository.delete(idTrabajador);
   }
-  async fetchTrabajadorFromApi() {
+  async fetchTrabajadorFromApi(
+    nombreEmpresa: string,
+    nombreUeb: string,
+    nombreDireccion: string,
+    nombreArea: string,
+  ) {
     const response = await axios.get('http://localhost:3005/test/trabajadores');
     const data = response.data;
-
-    const filteredData: { nombre_trabajador: string; id_area: number }[] = [];
+    const processedData: {
+      id_trabajador?: number;
+      nombre_trabajador: string;
+      id_area: number;
+    }[] = [];
     for (const item of data) {
       const area = await this.areaService.findAreaByName(item.AREA);
-      item.Trabajador.forEach((trabajador) => {
+      item.Trabajador.forEach(async (trabajador) => {
         if (area) {
-          filteredData.push({
-            nombre_trabajador: trabajador.NOMBRE,
-            id_area: area.id_area,
+          let trabajadorEntity = await this.trabajadorRepository.findOne({
+            where: { nombre_trabajador: trabajador.NOMBRE },
           });
+          if (trabajadorEntity) {
+            trabajadorEntity.nombre_trabajador = trabajador.NOMBRE;
+            trabajadorEntity.id_area = area.id_area;
+          } else {
+            trabajadorEntity = {
+              id_trabajador: undefined, // Aquí es donde agregamos la propiedad id_trabajador
+              nombre_trabajador: trabajador.NOMBRE,
+              id_area: area.id_area,
+            };
+          }
+          processedData.push(trabajadorEntity);
         } else {
           console.log('NO hay area');
         }
       });
     }
-    await this.trabajadorRepository.save(filteredData);
+    await this.trabajadorRepository.save(processedData);
     return this.trabajadorRepository.find();
   }
 }

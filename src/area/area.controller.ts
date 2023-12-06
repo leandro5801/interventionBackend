@@ -50,7 +50,15 @@ export class AreaController {
      } 
   */
   @Get('/area')
-  getAreaApi() {
-    return this.AreaService.fetchAreaFromApi();
+  getAreaApi(
+    nombreEmpresa: string,
+    nombreUeb: string,
+    nombreDireccion: string,
+  ) {
+    return this.AreaService.fetchAreaFromApi(
+      nombreEmpresa,
+      nombreUeb,
+      nombreDireccion,
+    );
   }
 }

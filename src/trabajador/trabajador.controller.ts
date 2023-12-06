@@ -53,7 +53,17 @@ export class TrabajadorController {
      } 
   */
   @Get('/trabajadores')
-  fetchDataFromApi() {
-    return this.TrabajadorService.fetchTrabajadorFromApi();
+  fetchDataFromApi(
+    nombreEmpresa: string,
+    nombreUeb: string,
+    nombreDireccion: string,
+    nombreArea: string,
+  ) {
+    return this.TrabajadorService.fetchTrabajadorFromApi(
+      nombreEmpresa,
+      nombreUeb,
+      nombreDireccion,
+      nombreArea,
+    );
   }
 }
