@@ -12,7 +12,7 @@ export class TrabajadorService {
     @InjectRepository(Trabajador)
     private readonly trabajadorRepository: Repository<Trabajador>,
     private areaService: AreaService,
-  ) {}
+  ) { }
 
   async createTrabajador(createTrabajador: trabajadorDto) {
     const trabajador = this.trabajadorRepository.create(createTrabajador);
@@ -66,13 +66,14 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
   ) {
     const response = await axios.get('http://localhost:3005/test/trabajadores');
     const data = response.data;
+    console.log(response.data);
     const processedData: {
       id_trabajador?: number;
       nombre_trabajador: string;
       id_area: number;
     }[] = [];
     for (const item of data) {
-      const area = await this.areaService.findAreaByName(item.AREA);
+      const area = await this.areaService.findAreaByName(item.Area);
       item.Trabajador.forEach(async (trabajador) => {
         if (area) {
           let trabajadorEntity = await this.trabajadorRepository.findOne({

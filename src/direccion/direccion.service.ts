@@ -11,7 +11,7 @@ export class DireccionService {
     @InjectRepository(Direccion)
     private readonly direccionRepository: Repository<Direccion>,
     private uebService: UebService,
-  ) {}
+  ) { }
 
   async createDireccion(createDireccion: direccionDto) {
     const direccion = this.direccionRepository.create(createDireccion);
@@ -74,21 +74,23 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
       id_ueb: number;
     }[] = [];
     for (const key in data) {
+      const ueb = await this.uebService.findUebByName('AICA');
       let direccion = await this.direccionRepository.findOne({
         where: { nombre_direccion: data[key].Unidad.trim() },
       });
       if (direccion) {
         direccion.nombre_direccion = data[key].Unidad.trim();
-        direccion.id_ueb = 1; // Aquí deberías buscar la UEB correcta en lugar de usar un valor fijo
+        direccion.id_ueb = ueb.id_ueb;
       } else {
         direccion = {
-          id_direccion: undefined, // Aquí es donde agregamos la propiedad id_direccion
+          id_direccion: undefined,
           nombre_direccion: data[key].Unidad.trim(),
-          id_ueb: 1, // Aquí deberías buscar la UEB correcta en lugar de usar un valor fijo
+          id_ueb: ueb.id_ueb,
         };
       }
       processedData.push(direccion);
     }
+
     await this.direccionRepository.save(processedData);
     return this.direccionRepository.find();
   }
