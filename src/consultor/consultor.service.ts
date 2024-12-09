@@ -29,6 +29,9 @@ export class ConsultorService {
   findConsultorById(id_consultor: number): Promise<Consultor> {
     return this.consultorRepository.findOneBy({ id_consultor });
   }
+  findConsultorByIdUser(id_user: number): Promise<Consultor> {
+    return this.consultorRepository.findOne({ where: { id_usuario: id_user } });
+  }
 
   /**
    * pasas un id por parametro y podras modificar la intervencion de dicho id

@@ -43,7 +43,7 @@ export class UebController {
   deleteArea(@Param('idUeb', ParseIntPipe) idUeb: number) {
     return this.UebService.deleteUeb(idUeb);
   }
-  @Get('/ueb')
+  @Get('ueb')
   fetchDataFromApi(idEmpresa: number, nombreEmpresa: string) {
     return this.UebService.fetchUebFromApi(idEmpresa, nombreEmpresa);
   }

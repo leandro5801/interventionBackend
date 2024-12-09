@@ -51,7 +51,7 @@ export class UebService {
   }
 
   async fetchUebFromApi(idEmpresa: number, nombreEmpresa: string) {
-    const response = await axios.get('http://localhost:3005/test/ueb');
+    const response = await axios.get('http://localhost:3005/list_UEBs.json');
     const data = response.data;
     const processedData: {
       id_ueb?: number;

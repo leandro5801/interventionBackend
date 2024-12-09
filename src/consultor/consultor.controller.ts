@@ -25,6 +25,10 @@ export class ConsultorController {
   findAll() {
     return this.ConsultorService.findAllConsultor();
   }
+  @Get('/:id_user')
+  findByUser(@Param('id_user', ParseIntPipe) id_user: number) {
+    return this.ConsultorService.findConsultorByIdUser(id_user);
+  }
 
   @Patch(':id_consultor')
   update(

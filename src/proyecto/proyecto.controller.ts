@@ -17,12 +17,14 @@ export class ProyectoController {
   constructor(private readonly ProyectoService: ProyectoService) {}
 
   @Post()
-  createProyecto(@Body() ProyectoDto: proyectoDto) {
+  async createProyecto(@Body() ProyectoDto: proyectoDto) {
+    console.log(ProyectoDto);
+
     return this.ProyectoService.createProyecto(ProyectoDto);
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.ProyectoService.findAllProyecto();
   }
 
@@ -32,7 +34,7 @@ export class ProyectoController {
   //}
 
   @Patch(':id_proyecto')
-  update(
+  async update(
     @Param('id_proyecto', ParseIntPipe) id_proyecto: number,
     @Body() updateProyectoDto: proyectoDto,
   ) {
@@ -40,7 +42,9 @@ export class ProyectoController {
   }
 
   @Delete(':id_proyecto')
-  deleteProyecto(@Param('id_proyecto', ParseIntPipe) id_proyecto: number) {
+  async deleteProyecto(
+    @Param('id_proyecto', ParseIntPipe) id_proyecto: number,
+  ) {
     return this.ProyectoService.deleteProyecto(id_proyecto);
   }
 

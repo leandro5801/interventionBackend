@@ -11,7 +11,7 @@ export class DireccionService {
     @InjectRepository(Direccion)
     private readonly direccionRepository: Repository<Direccion>,
     private uebService: UebService,
-  ) { }
+  ) {}
 
   async createDireccion(createDireccion: direccionDto) {
     const direccion = this.direccionRepository.create(createDireccion);
@@ -64,6 +64,9 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
   }
 
   async fetchDireccionFromApi(nombreEmpresa: string, nombreUeb: string) {
+    console.log(nombreEmpresa);
+    console.log(nombreUeb);
+
     const response = await axios.get(
       'http://localhost:3005/test/direccionArea',
     );

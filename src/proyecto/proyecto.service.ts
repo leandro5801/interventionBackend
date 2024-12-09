@@ -3,17 +3,37 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Proyecto } from './proyecto.entity';
 import { Repository } from 'typeorm';
 import { proyectoDto } from './dto/proyecto.dto';
+import { NotificacionGateway } from 'src/notificacion/gateway/notificacion.gateway';
+import { NotificacionService } from 'src/notificacion/controller/notificacion.service';
 
 @Injectable()
 export class ProyectoService {
   constructor(
     @InjectRepository(Proyecto)
     private readonly proyectoRepository: Repository<Proyecto>,
+    private readonly notificacionGateway: NotificacionGateway,
+    private readonly notificacionService: NotificacionService,
   ) {}
 
   async createProyecto(createProyecto: proyectoDto) {
+    console.log(createProyecto);
+
     const proyecto = this.proyectoRepository.create(createProyecto);
     await this.proyectoRepository.save(proyecto);
+    // Guardar la notificación en la base de datos
+    const notificacion = {
+      mensaje: `Has sido asignado al proyecto: ${proyecto.nombre_proyecto}.
+      Tiene como objetivo ${proyecto.objetivos}`,
+    };
+    const newNotificacion = await this.notificacionService.createNotificacion(
+      notificacion,
+    );
+    proyecto.consultores_asignados_id.forEach((consultor) => {
+      this.notificacionGateway.sendNotificationToConsultor(
+        Number(consultor),
+        newNotificacion,
+      );
+    });
     return proyecto;
   }
 

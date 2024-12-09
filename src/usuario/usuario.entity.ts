@@ -13,4 +13,6 @@ export class Usuario {
 
   @Column()
   id_rol: number;
+  @Column({ nullable: true })
+  id_session: number;
 }

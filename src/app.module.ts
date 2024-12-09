@@ -30,14 +30,18 @@ import { Clasificacion } from './clasificacion/clasificacion.entity';
 import { ClasificacionModule } from './clasificacion/clasificacion.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { Cliente } from './cliente/cliente.entity';
+import { SessionModule } from './sesion/sesion.module';
+import { Session } from './sesion/sesion.entity';
+import { NotificacionModule } from './notificacion/notificacion.module';
+import { Notificacion } from './notificacion/notificacion.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: '127.0.0.1',
       port: 5432,
-      password: 'postgres',
+      password: '1234',
       username: 'postgres',
       entities: [
         Intervencion,
@@ -53,13 +57,16 @@ import { Cliente } from './cliente/cliente.entity';
         Usuario,
         Rol,
         Proyecto,
+        Session,
+        Notificacion,
       ],
-      database: 'bdIntervencion',
+      database: 'postgres',
       synchronize: true,
       logging: true,
     }),
 
     IntervencionModule,
+    SessionModule,
     ClienteModule,
     UebModule,
     AreaModule,
@@ -72,6 +79,7 @@ import { Cliente } from './cliente/cliente.entity';
     EmpresaModule,
     AutenticacionModule,
     UsuarioModule,
+    NotificacionModule,
     RolModule,
   ],
   controllers: [AppController],
