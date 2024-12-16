@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { proyectoDto } from './dto/proyecto.dto';
 import { NotificacionGateway } from 'src/notificacion/gateway/notificacion.gateway';
 import { NotificacionService } from 'src/notificacion/controller/notificacion.service';
+import { ConsultorService } from 'src/consultor/consultor.service';
 
 @Injectable()
 export class ProyectoService {
@@ -16,19 +17,21 @@ export class ProyectoService {
   ) {}
 
   async createProyecto(createProyecto: proyectoDto) {
-    console.log(createProyecto);
-
     const proyecto = this.proyectoRepository.create(createProyecto);
-    await this.proyectoRepository.save(proyecto);
+
     // Guardar la notificación en la base de datos
     const notificacion = {
       mensaje: `Has sido asignado al proyecto: ${proyecto.nombre_proyecto}.
-      Tiene como objetivo ${proyecto.objetivos}`,
+      `,
     };
-    const newNotificacion = await this.notificacionService.createNotificacion(
-      notificacion,
-    );
-    proyecto.consultores_asignados_id.forEach((consultor) => {
+
+    await this.proyectoRepository.save(proyecto);
+    proyecto.consultores_asignados_id.forEach(async (consultor) => {
+      const newNotificacion = await this.notificacionService.createNotificacion(
+        notificacion,
+        consultor,
+      );
+
       this.notificacionGateway.sendNotificationToConsultor(
         Number(consultor),
         newNotificacion,

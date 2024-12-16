@@ -23,11 +23,18 @@ export class NotificacionGateway
   private clients: Map<string, any> = new Map();
 
   handleConnection(client: any) {
-    this.clients.set(client.id, client);
+    const consultorId = client.handshake.query.consultorId; // Obtener el ID del consultor
+    console.log(consultorId);
+
+    this.clients.set(consultorId, client);
   }
 
   handleDisconnect(client: any) {
-    this.clients.delete(client.id);
+    this.clients.forEach((value, key) => {
+      if (value.id === client.id) {
+        this.clients.delete(key);
+      }
+    });
   }
   sendNotificationToConsultor(
     consultorId: number,

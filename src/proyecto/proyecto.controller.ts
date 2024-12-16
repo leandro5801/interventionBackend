@@ -16,14 +16,12 @@ import { ProyectoService } from './proyecto.service';
 export class ProyectoController {
   constructor(private readonly ProyectoService: ProyectoService) {}
 
-  @Post()
+  @Post('')
   async createProyecto(@Body() ProyectoDto: proyectoDto) {
-    console.log(ProyectoDto);
-
     return this.ProyectoService.createProyecto(ProyectoDto);
   }
 
-  @Get()
+  @Get('')
   async findAll() {
     return this.ProyectoService.findAllProyecto();
   }

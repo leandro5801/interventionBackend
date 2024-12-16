@@ -13,8 +13,8 @@ export class NotificacionController {
   deleteNotificacion(@Param('id_notificacion') id: number) {
     return this.notificacionService.deleteNotificacion(+id);
   }
-  @Delete('/:id_consultor')
+  @Delete('/consultor/:id_consultor')
   clearNotificaciones(@Param('id_consultor') id: number) {
-    return this.notificacionService.deleteNotificacion(+id);
+    return this.notificacionService.clearAll(+id);
   }
 }
