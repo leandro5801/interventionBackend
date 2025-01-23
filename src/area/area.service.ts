@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { areaDto } from './dto/area.dto';
 import { DireccionService } from 'src/direccion/direccion.service';
 import axios from 'axios';
+import { ChargeAreaDto } from './dto/chargeAreaDto';
 
 @Injectable()
 export class AreaService {
@@ -24,9 +25,8 @@ export class AreaService {
   findAllArea(): Promise<Area[]> {
     return this.areaRepository.find();
   }
-
   /**
-   * se pasa un id por parametro y esta funcion devuelve la intervencion con el id
+   * se pasa un id por parámetro y esta función devuelve la intervención con el id
    */
   findAreaById(idArea: number): Promise<Area> {
     return this.areaRepository.findOneBy({ id_area: idArea });
@@ -77,48 +77,56 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
   //   });
   //   await this.areaRepository.save(filteredData);
   // }
-  async fetchAreaFromApi(
-    nombreEmpresa: string,
-    nombreUeb: string,
-    nombreDireccion: string,
-  ) {
-    const response = await axios.get(
-      'http://localhost:3005/test/direccionArea',
-    );
-    const data = response.data;
+  async fetchAreaFromApi(chargeAreaDto: ChargeAreaDto) {
+    console.log(chargeAreaDto);
+
+    const { direccionId, nombre_direccion, nombre_ueb } = chargeAreaDto;
+    const response = await axios.get('http://localhost:3005/structure.json');
+    const data = response.data['area'];
     const processedData: {
       id_area?: number;
       nombre_area: string;
       id_direccion: number;
     }[] = [];
-    for (const objKey of Object.keys(data)) {
-      const direccion = data[objKey];
-      for (const dirKey of Object.keys(direccion.Area)) {
-        const direccionn = await this.direccionService.findDireccionByName(
-          data[objKey].Unidad.trim(),
-        );
-        const areaObj = direccion.Area[dirKey];
-        if (direccionn) {
-          let area = await this.areaRepository.findOne({
-            where: { nombre_area: areaObj.Area },
-          });
-          if (area) {
-            area.nombre_area = areaObj.Area;
-            area.id_direccion = direccionn.id_direccion;
-          } else {
-            area = {
-              id_area: undefined, // Aquí es donde agregamos la propiedad id_area
-              nombre_area: areaObj.Area,
-              id_direccion: direccionn.id_direccion,
-            };
-          }
+    for (const objKey of data) {
+      const direccionn = await this.direccionService.findDireccionById(
+        direccionId,
+      );
+      console.log(direccionn);
+
+      const areaObj = objKey.area;
+      const ueb = objKey.ueb;
+      if (direccionn) {
+        console.log('Aki si');
+
+        let area = await this.areaRepository.findOne({
+          where: { nombre_area: areaObj, id_direccion: direccionId },
+        });
+        console.log(area);
+
+        if (area) {
+          console.log('entro');
+
+          area.nombre_area = areaObj;
+          area.id_direccion = direccionn.id_direccion;
+        } else if (
+          objKey.structure === nombre_direccion &&
+          ueb === nombre_ueb
+        ) {
+          console.log('entro 2');
+
+          area = {
+            id_area: undefined, // Aquí es donde agregamos la propiedad id_area
+            nombre_area: areaObj,
+            id_direccion: direccionn.id_direccion,
+          };
           processedData.push(area);
-        } else {
-          console.log('NO hay direcciones');
+          await this.areaRepository.save(processedData);
         }
+      } else {
+        console.log('NO hay direcciones');
       }
     }
-    await this.areaRepository.save(processedData);
     return this.areaRepository.find();
   }
 }

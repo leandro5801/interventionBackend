@@ -16,12 +16,18 @@ export class UsuarioService {
 
   async createUsuario(createUsuario: usuarioDto) {
     const usuario = this.usuarioRepository.create(createUsuario);
+    console.log(usuario);
+
+    const user = await this.usuarioRepository.save(usuario);
+    console.log(user);
+
     const session = await this.sessionService.crearTema({
-      id_usuario: usuario.id_usuario,
+      id_usuario: user.id_usuario,
     } as SessionDto);
-    usuario.id_session = session.id;
-    await this.usuarioRepository.save(usuario);
-    return usuario;
+    console.log(session);
+
+    user.id_session = session.id;
+    return user;
   }
   /**
    *retorna un arreglo de todas las intervenciones
@@ -65,6 +71,7 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 }*/
 
   async deleteUsuario(id_usuario: number) {
+    await this.sessionService.eliminarTemaByUser(id_usuario);
     return this.usuarioRepository.delete(id_usuario);
   }
 

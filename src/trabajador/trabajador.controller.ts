@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { trabajadorDto } from './dto/trabajador.dto';
 import { TrabajadorService } from './trabajador.service';
+import { ChargeTrabajadorDto } from './dto/chargeTrabajador';
 
 @Controller('trabajador')
 export class TrabajadorController {
@@ -52,18 +53,11 @@ export class TrabajadorController {
        return this.IntervencionService.filterAux(interventionDTO);  
      } 
   */
-  @Get('/trabajadores')
+  @Post('/trabajadores')
   fetchDataFromApi(
-    nombreEmpresa: string,
-    nombreUeb: string,
-    nombreDireccion: string,
-    nombreArea: string,
+    @Body()
+    chargeTrabajadorDto: ChargeTrabajadorDto,
   ) {
-    return this.TrabajadorService.fetchTrabajadorFromApi(
-      nombreEmpresa,
-      nombreUeb,
-      nombreDireccion,
-      nombreArea,
-    );
+    return this.TrabajadorService.fetchTrabajadorFromApi(chargeTrabajadorDto);
   }
 }

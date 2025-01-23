@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Session } from './sesion.entity';
 import { Repository } from 'typeorm';
@@ -12,29 +12,39 @@ export class SessionServices {
   ) {}
 
   async cambiarTema(Tema: SessionDto) {
-    console.log(Tema);
-
     const { id, isDark, font } = Tema;
     const tema = await this.sessionRepository.findOne({
       where: { id: id },
     });
-    console.log();
-
+    if (!tema) {
+      throw new NotFoundException(`Session dont exist`); // Lanza un error si el tema no existe
+    }
     tema.isDark = isDark;
     tema.font = font;
-    console.log(tema);
-
     this.sessionRepository.save(tema);
   }
 
   async getTema(id: number) {
-    return await this.sessionRepository.findOneBy({ id: id });
+    const tema = await this.sessionRepository.findOneBy({ id: id });
+    if (!tema) {
+      return new NotFoundException(`Session dont exist`); // Lanza un error si el tema no exist
+    }
+    return tema;
   }
   async crearTema(Tema: SessionDto) {
     const newTema = this.sessionRepository.create(Tema);
+    console.log(newTema);
+
     return this.sessionRepository.save(newTema);
   }
   async eliminarTema(id: number) {
-    return await this.sessionRepository.delete({ id: id });
+    const tema = await this.getTema(id);
+    return (await this.sessionRepository.delete({ id: id })).affected > 0;
+  }
+  async eliminarTemaByUser(id_usuario: number) {
+    return (
+      (await this.sessionRepository.delete({ id_usuario: id_usuario }))
+        .affected > 0
+    );
   }
 }

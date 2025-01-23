@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { trabajadorDto } from './dto/trabajador.dto';
 import { AreaService } from 'src/area/area.service';
 import axios from 'axios';
+import { ChargeTrabajadorDto } from './dto/chargeTrabajador';
 
 @Injectable()
 export class TrabajadorService {
@@ -12,7 +13,7 @@ export class TrabajadorService {
     @InjectRepository(Trabajador)
     private readonly trabajadorRepository: Repository<Trabajador>,
     private areaService: AreaService,
-  ) { }
+  ) {}
 
   async createTrabajador(createTrabajador: trabajadorDto) {
     const trabajador = this.trabajadorRepository.create(createTrabajador);
@@ -58,44 +59,78 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
   async deleteTrabajador(idTrabajador: number) {
     return this.trabajadorRepository.delete(idTrabajador);
   }
-  async fetchTrabajadorFromApi(
-    nombreEmpresa: string,
-    nombreUeb: string,
-    nombreDireccion: string,
-    nombreArea: string,
-  ) {
-    const response = await axios.get('http://localhost:3005/test/trabajadores');
-    const data = response.data;
-    console.log(response.data);
-    const processedData: {
-      id_trabajador?: number;
-      nombre_trabajador: string;
-      id_area: number;
-    }[] = [];
-    for (const item of data) {
-      const area = await this.areaService.findAreaByName(item.Area);
-      item.Trabajador.forEach(async (trabajador) => {
+
+  async fetchTrabajadorFromApi(chargeTrabajadorDto: ChargeTrabajadorDto) {
+    const { idArea, nombre_ueb, nombre_direccion, nombre_area } =
+      chargeTrabajadorDto;
+
+    let requestUri: string = this.getRequestUri(nombre_ueb, nombre_direccion);
+
+    if (requestUri.length !== 0) {
+      const response = await axios.get(
+        `http://localhost:3005/trabajadores/${requestUri}`,
+      );
+      const data = response.data['Trabajadores'];
+      console.log(response.data);
+      const processedData: {
+        id_trabajador?: number;
+        nombre_trabajador: string;
+        id_area: number;
+      }[] = [];
+      for (const item of data) {
+        const area = await this.areaService.findAreaById(idArea);
         if (area) {
-          let trabajadorEntity = await this.trabajadorRepository.findOne({
-            where: { nombre_trabajador: trabajador.NOMBRE },
-          });
-          if (trabajadorEntity) {
-            trabajadorEntity.nombre_trabajador = trabajador.NOMBRE;
-            trabajadorEntity.id_area = area.id_area;
+          if (area.nombre_area === item.Area) {
+            let trabajadorEntity = await this.trabajadorRepository.findOne({
+              where: { nombre_trabajador: item.Nombre, id_area: idArea },
+            });
+            if (trabajadorEntity) {
+              trabajadorEntity.nombre_trabajador = item.Nombre;
+              trabajadorEntity.id_area = area.id_area;
+            } else {
+              trabajadorEntity = {
+                id_trabajador: undefined, // Aquí es donde agregamos la propiedad id_trabajador
+                nombre_trabajador: item.Nombre,
+                id_area: idArea,
+              };
+            }
+            processedData.push(trabajadorEntity);
           } else {
-            trabajadorEntity = {
-              id_trabajador: undefined, // Aquí es donde agregamos la propiedad id_trabajador
-              nombre_trabajador: trabajador.NOMBRE,
-              id_area: area.id_area,
-            };
+            console.log('NO hay area');
           }
-          processedData.push(trabajadorEntity);
-        } else {
-          console.log('NO hay area');
         }
-      });
+      }
+      await this.trabajadorRepository.save(processedData);
     }
-    await this.trabajadorRepository.save(processedData);
     return this.trabajadorRepository.find();
+  }
+  private getRequestUri(nombreUeb: string, nombreDireccion: string): string {
+    const uriMap = {
+      AICA: {
+        'Dirección Técnico Productiva': 'DirTecProdAica.json',
+      },
+      CITOSTÁTICOS: {
+        'Dirección Técnico Productiva': 'DirTecProdCit.json',
+        'Departamento de Calidad': 'DptoCalidadCit.json',
+        'Departamento de Dirección': 'DptoDireccionCit.json',
+      },
+      'JULIO TRIGO': {
+        'Dirección Técnico Productiva': 'DirTecProdJt.json',
+        'Departamento de Calidad': 'DptoCalidadJt.json',
+        'Departamento de Dirección': 'DptoDireccionJt.json',
+      },
+      'SH+': {
+        'Dirección Técnico Productiva': 'DirTecProdSh.json',
+        'Departamento de Calidad': 'DptoCalidadSh.json',
+        'Departamento de Dirección': 'DptoDireccionSh.json',
+      },
+      LIORAD: {
+        'Dirección Técnico Productiva': 'DirTecProdLior.json',
+        'Departamento de Calidad': 'DptoCalidadLior.json',
+        'Departamento de Dirección': 'DptoDireccionLior.json',
+      },
+    };
+
+    return uriMap[nombreUeb]?.[nombreDireccion] || '';
   }
 }

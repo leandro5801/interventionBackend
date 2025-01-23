@@ -13,6 +13,22 @@ export class NotificacionService {
     private readonly consultorService: ConsultorService,
   ) {}
 
+  async updateNotificacion(notificacion: NotificacionDto, id: number) {
+    // Usar preload para cargar la notificación existente
+    const notification = await this.repositoryNotification.preload({
+      id: id,
+      ...notificacion, // Asumiendo que notificacion contiene los campos a actualizar
+    });
+
+    // Verificar si la notificación fue encontrada
+    if (!notification) {
+      return new BadRequestException('Notificacion no existe');
+    }
+
+    // Guardar la notificación actualizada en la base de datos
+    return await this.repositoryNotification.save(notification);
+  }
+
   async getNotificacion(id: number) {
     const notifications = await this.repositoryNotification.find({
       loadRelationIds: true,

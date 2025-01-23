@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { direccionDto } from './dto/direccion.dto';
 import { DireccionService } from './direccion.service';
+import { ChargeDireccionDto } from './dto/chargeDireccion';
 
 @Controller('direccion')
 export class DireccionController {
@@ -52,11 +53,8 @@ export class DireccionController {
        return this.IntervencionService.filterAux(interventionDTO);  
      } 
   */
-  @Get('/direccion')
-  getDireccion(nombreEmpresa: string, nombreUeb: string) {
-    return this.DireccionService.fetchDireccionFromApi(
-      nombreEmpresa,
-      nombreUeb,
-    );
+  @Post('/direccion')
+  getDireccion(@Body() chargeDireccionDto: ChargeDireccionDto) {
+    return this.DireccionService.fetchDireccionFromApi(chargeDireccionDto);
   }
 }

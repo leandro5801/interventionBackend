@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { direccionDto } from './dto/direccion.dto';
 import axios from 'axios';
 import { UebService } from 'src/ueb/ueb.service';
+import { ChargeDireccionDto } from './dto/chargeDireccion';
 @Injectable()
 export class DireccionService {
   constructor(
@@ -63,37 +64,37 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
     return this.direccionRepository.delete(idDireccion);
   }
 
-  async fetchDireccionFromApi(nombreEmpresa: string, nombreUeb: string) {
-    console.log(nombreEmpresa);
-    console.log(nombreUeb);
+  async fetchDireccionFromApi(chargeDireccionDto: ChargeDireccionDto) {
+    const { nombre_empresa, nombre_ueb, uebId } = chargeDireccionDto;
 
-    const response = await axios.get(
-      'http://localhost:3005/test/direccionArea',
-    );
-    const data = response.data;
+    console.log(chargeDireccionDto);
+
+    const response = await axios.get('http://localhost:3005/structure.json');
+    const data = response.data['structure'];
+    console.log(data);
+
     const processedData: {
       id_direccion?: number;
       nombre_direccion: string;
       id_ueb: number;
     }[] = [];
-    for (const key in data) {
-      const ueb = await this.uebService.findUebByName('AICA');
+    for (const object of data) {
+      //const ueb = await this.uebService.findUebByName('AICA');
       let direccion = await this.direccionRepository.findOne({
-        where: { nombre_direccion: data[key].Unidad.trim() },
+        where: { nombre_direccion: object.structure.trim(), id_ueb: uebId },
       });
       if (direccion) {
-        direccion.nombre_direccion = data[key].Unidad.trim();
-        direccion.id_ueb = ueb.id_ueb;
-      } else {
+        direccion.nombre_direccion = object.structure.trim();
+        direccion.id_ueb = uebId;
+      } else if (object.ueb === nombre_ueb) {
         direccion = {
           id_direccion: undefined,
-          nombre_direccion: data[key].Unidad.trim(),
-          id_ueb: ueb.id_ueb,
+          nombre_direccion: object.structure,
+          id_ueb: uebId,
         };
+        processedData.push(direccion);
       }
-      processedData.push(direccion);
     }
-
     await this.direccionRepository.save(processedData);
     return this.direccionRepository.find();
   }

@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { areaDto } from './dto/area.dto';
 import { AreaService } from './area.service';
+import { ChargeAreaDto } from './dto/chargeAreaDto';
 
 @Controller('area')
 export class AreaController {
@@ -25,11 +26,6 @@ export class AreaController {
   findAll() {
     return this.AreaService.findAllArea();
   }
-
-  /*@Get(':idCliente')
-     findOneById(@Param('idCliente', ParseIntPipe) idCliente: number) {
-       return this.ClienteService.findClienteById(+idCliente);
-     }*/
 
   @Patch(':idArea')
   update(
@@ -49,16 +45,8 @@ export class AreaController {
        return this.IntervencionService.filterAux(interventionDTO);  
      } 
   */
-  @Get('/area')
-  getAreaApi(
-    nombreEmpresa: string,
-    nombreUeb: string,
-    nombreDireccion: string,
-  ) {
-    return this.AreaService.fetchAreaFromApi(
-      nombreEmpresa,
-      nombreUeb,
-      nombreDireccion,
-    );
+  @Post('/area')
+  getAreaApi(@Body() chargeAreaDto: ChargeAreaDto) {
+    return this.AreaService.fetchAreaFromApi(chargeAreaDto);
   }
 }

@@ -9,6 +9,6 @@ export class Session {
   isDark: boolean;
   @Column({ unique: true })
   id_usuario: number;
-  @Column({ default: '' })
+  @Column({ default: 'Roboto' })
   font: string;
 }
