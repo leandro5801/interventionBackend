@@ -12,6 +12,9 @@ export class Intervencion {
   @Column()
   descripcion: string;
 
+  @Column({ default: false })
+  cargar_intervencion: boolean;
+
   @Column()
   id_area: number;
 

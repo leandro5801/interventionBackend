@@ -13,6 +13,8 @@ export class Proyecto {
 
   @Column()
   objetivos: string;
+  @Column({ default: false })
+  cargar_proyecto: boolean;
 
   @Column('int', { array: true })
   consultores_asignados_id: number[];

@@ -10,6 +10,8 @@ export class Usuario {
 
   @Column()
   contraseña: string;
+  /* @Column({ unique: true })
+  carnet_identidad: string; */
 
   @Column()
   id_rol: number;
