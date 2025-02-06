@@ -61,6 +61,7 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 }*/
 
   async deleteDireccion(idDireccion: number) {
+    console.log(idDireccion);
     return this.direccionRepository.delete(idDireccion);
   }
 
