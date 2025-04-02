@@ -6,6 +6,8 @@ import { trabajadorDto } from './dto/trabajador.dto';
 import { AreaService } from 'src/area/area.service';
 import axios from 'axios';
 import { ChargeTrabajadorDto } from './dto/chargeTrabajador';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class TrabajadorService {
@@ -64,20 +66,23 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
     const { idArea, nombre_ueb, nombre_direccion, nombre_area } =
       chargeTrabajadorDto;
 
-    let requestUri: string = this.getRequestUri(nombre_ueb, nombre_direccion);
+    const requestUri: string = this.getRequestUri(nombre_ueb, nombre_direccion);
+    const filePath = path.join(__dirname, '../data/trabajadores', requestUri);
+    console.log(requestUri);
+    console.log(filePath);
+    console.log(requestUri.length !== 0 && fs.existsSync(filePath));
 
-    if (requestUri.length !== 0) {
-      const response = await axios.get(
-        `http://localhost:3005/trabajadores/${requestUri}`,
-      );
-      const data = response.data['Trabajadores'];
-      console.log(response.data);
+    if (requestUri.length !== 0 && fs.existsSync(filePath)) {
+      const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+      console.log(data);
       const processedData: {
         id_trabajador?: number;
         nombre_trabajador: string;
         id_area: number;
       }[] = [];
-      for (const item of data) {
+
+      for (const item of data.Trabajadores) {
         const area = await this.areaService.findAreaById(idArea);
         if (area) {
           if (area.nombre_area === item.Area) {
@@ -89,7 +94,7 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
               trabajadorEntity.id_area = area.id_area;
             } else {
               trabajadorEntity = {
-                id_trabajador: undefined, // Aquí es donde agregamos la propiedad id_trabajador
+                id_trabajador: undefined,
                 nombre_trabajador: item.Nombre,
                 id_area: idArea,
               };
@@ -100,9 +105,9 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
           }
         }
       }
-      await this.trabajadorRepository.save(processedData);
+      await this.trabajadorRepository.save(processedData.filter(Boolean));
+      return this.trabajadorRepository.find();
     }
-    return this.trabajadorRepository.find();
   }
   private getRequestUri(nombreUeb: string, nombreDireccion: string): string {
     const uriMap = {

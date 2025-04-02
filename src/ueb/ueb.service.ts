@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { uebDto } from './dto/ueb.dto';
 import axios from 'axios';
 import { EmpresaService } from '../empresa/empresa.service';
-
+import * as data from '../data/structure.json';
 @Injectable()
 export class UebService {
   constructor(
@@ -51,27 +51,27 @@ export class UebService {
   }
 
   async fetchUebFromApi(idEmpresa: number, nombreEmpresa: string) {
-    const response = await axios.get('http://localhost:3005/list_UEBs.json');
-    const data = response.data;
+    const uebData = data.ueb; // Use local data instead of API call
     const processedData: {
       id_ueb?: number;
       nombre_ueb: string;
       id_empresa: number;
     }[] = [];
-    for (const item of data) {
+
+    for (const item of uebData) {
       const empresa = await this.empresaService.findEmpresaByName(item.entidad);
       if (empresa) {
         let ueb = await this.uebRepository.findOne({
-          where: { nombre_ueb: item.nombre },
+          where: { nombre_ueb: item.ueb }, // Adjusted to match the structure
         });
 
         if (ueb) {
-          ueb.nombre_ueb = item.nombre;
+          ueb.nombre_ueb = item.ueb; // Adjusted to match the structure
           ueb.id_empresa = empresa.id_empresa;
         } else {
           ueb = {
-            id_ueb: undefined, // Aquí es donde agregamos la propiedad id_ueb
-            nombre_ueb: item.nombre,
+            id_ueb: undefined,
+            nombre_ueb: item.ueb, // Adjusted to match the structure
             id_empresa: empresa.id_empresa,
           };
         }
@@ -80,7 +80,9 @@ export class UebService {
         console.log('No hay empresa');
       }
     }
-    await this.uebRepository.save(processedData);
+
+    await this.uebRepository.save(processedData.filter(Boolean)); // Filter out any undefined values
+
     return this.uebRepository.find();
   }
 }

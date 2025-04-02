@@ -6,6 +6,7 @@ import { proyectoDto } from './dto/proyecto.dto';
 import { NotificacionGateway } from 'src/notificacion/gateway/notificacion.gateway';
 import { NotificacionService } from 'src/notificacion/controller/notificacion.service';
 import { ConsultorService } from 'src/consultor/consultor.service';
+import axios from 'axios';
 
 @Injectable()
 export class ProyectoService {
@@ -65,6 +66,8 @@ export class ProyectoService {
     proyecto.id_proyecto = id_proyecto;
     proyecto.id_cliente = ProyectoDto.id_cliente;
     proyecto.nombre_proyecto = ProyectoDto.nombre_proyecto;
+    proyecto.cargar_proyecto = ProyectoDto.cargar_proyecto;
+    proyecto.tipo_proyecto = ProyectoDto.tipo_proyecto;
     proyecto.objetivos = ProyectoDto.objetivos;
     proyecto.consultores_asignados_id = ProyectoDto.consultores_asignados_id;
     return this.proyectoRepository.save(proyecto);
@@ -80,5 +83,40 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 
   async deleteProyecto(id_proyecto: number) {
     return this.proyectoRepository.delete(id_proyecto);
+  }
+
+  async fetchAreaFromApi() {
+    let projects: [];
+    const processedData: {
+      id_proyecto?: number;
+      nombre_proyecto: string;
+      tipo_proyecto: string;
+      cargar_proyecto: boolean;
+    }[] = [];
+    try {
+      const response = await axios.get(
+        'http://localhost:3005/projects/projects.json',
+      );
+      if (response.status === 200) {
+        projects = response.data['proyectos'];
+      }
+    } catch (error) {}
+    for (const key of projects) {
+      const nameProject = key['nombre'];
+      const typeProject = key['tipo_proyecto'];
+      const existentProject = await this.proyectoRepository.findOne({
+        where: { nombre_proyecto: nameProject, tipo_proyecto: typeProject },
+      });
+
+      if (!existentProject) {
+        await this.proyectoRepository.save({
+          id_proyecto: undefined,
+          nombre_proyecto: nameProject,
+          tipo_proyecto: typeProject,
+          cargar_proyecto: true,
+        });
+      }
+    }
+    return this.proyectoRepository.find({ where: { cargar_proyecto: true } });
   }
 }

@@ -46,9 +46,8 @@ export class ProyectoController {
     return this.ProyectoService.deleteProyecto(id_proyecto);
   }
 
-  /* filter( interventionDTO: any){
-         console.log(interventionDTO);
-       return this.IntervencionService.filterAux(interventionDTO);  
-     } 
-  */
+  @Get('/proyecto')
+  async getProjectsApi() {
+    return this.ProyectoService.fetchAreaFromApi();
+  }
 }

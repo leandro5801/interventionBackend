@@ -33,4 +33,9 @@ export class NotificacionController {
   ) {
     return this.notificacionService.updateNotificacion(notificacion, id);
   }
+
+  @Get('/consultor/:id_consultor/read')
+  markAllAsRead(@Param('id_consultor') id: number) {
+    return this.notificacionService.markAllAsRead(+id);
+  }
 }

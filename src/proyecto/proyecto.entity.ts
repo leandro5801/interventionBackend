@@ -5,17 +5,20 @@ export class Proyecto {
   @PrimaryGeneratedColumn()
   id_proyecto: number;
 
-  @Column()
+  @Column({ nullable: true })
   id_cliente: number;
 
   @Column()
   nombre_proyecto: string;
 
-  @Column()
+  @Column({ nullable: true })
   objetivos: string;
+
   @Column({ default: false })
   cargar_proyecto: boolean;
+  @Column({ nullable: true })
+  tipo_proyecto?: string;
 
-  @Column('int', { array: true })
+  @Column('int', { array: true, nullable: true })
   consultores_asignados_id: number[];
 }

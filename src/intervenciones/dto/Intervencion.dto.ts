@@ -1,3 +1,6 @@
+import { Periodo } from '../periodo.entity';
+import { PeriodoDto } from './Periodo.dto';
+
 export class IntervencionDto {
   readonly id_intervencion: number;
   readonly nombre_intervencion: string;
@@ -6,6 +9,5 @@ export class IntervencionDto {
   readonly id_trabajador: number;
   readonly id_proyecto: number;
   readonly id_consultor: number;
-  readonly start_date: string;
-  readonly end_date: string;
+  readonly periodos: Periodo[];
 }

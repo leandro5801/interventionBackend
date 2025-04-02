@@ -34,6 +34,7 @@ import { SessionModule } from './sesion/sesion.module';
 import { Session } from './sesion/sesion.entity';
 import { NotificacionModule } from './notificacion/notificacion.module';
 import { Notificacion } from './notificacion/notificacion.entity';
+import { Periodo } from './intervenciones/periodo.entity';
 
 @Module({
   imports: [
@@ -59,9 +60,11 @@ import { Notificacion } from './notificacion/notificacion.entity';
         Proyecto,
         Session,
         Notificacion,
+        Periodo,
       ],
-      database: 'postgres',
+      database: 'InterventionDB',
       synchronize: true,
+
       logging: true,
     }),
 

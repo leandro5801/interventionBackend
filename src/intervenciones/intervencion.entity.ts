@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 import { Recomendacion } from 'src/recomendacion/recomendacion.entity';
+import { Periodo } from './periodo.entity';
 @Entity()
 export class Intervencion {
   @PrimaryGeneratedColumn()
@@ -9,27 +10,27 @@ export class Intervencion {
   @Column()
   nombre_intervencion: string;
 
-  @Column()
+  @Column({ nullable: true })
   descripcion: string;
 
   @Column({ default: false })
   cargar_intervencion: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   id_area: number;
 
-  @Column()
+  @Column({ nullable: true })
   id_trabajador: number;
 
   @Column()
   id_proyecto: number;
 
-  @Column()
+  @Column({ nullable: true })
   id_consultor: number;
 
-  @Column({ type: 'date' })
-  start_date: Date;
-
-  @Column({ type: 'date' })
-  end_date: Date;
+  @OneToMany(() => Periodo, (periodo) => periodo.intervencion, {
+    eager: true,
+    cascade: ['insert', 'remove', 'update'],
+  })
+  periodos: Periodo[];
 }

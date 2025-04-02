@@ -19,8 +19,8 @@ export class SessionServices {
     if (!tema) {
       throw new NotFoundException(`Session dont exist`); // Lanza un error si el tema no existe
     }
-    tema.isDark = isDark;
-    tema.font = font;
+    isDark !== undefined ? (tema.isDark = isDark) : '';
+    tema.font !== undefined ? (tema.font = font) : '';
     this.sessionRepository.save(tema);
   }
 

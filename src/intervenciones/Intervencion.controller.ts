@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { IntervencionDto } from './dto/intervencion.dto';
 import { IntervencionService } from './Intervencion.service';
+import { ChargeInterventionDto } from './dto/ChargeInterventionDto';
 
 @Controller('intervencion')
 export class IntervencionController {
@@ -27,8 +28,8 @@ export class IntervencionController {
   }
 
   @Get(':id')
-  findOneById(@Param('idIntervencion', ParseIntPipe) idIntervencion: number) {
-    return this.IntervencionService.findIntervencionById(+idIntervencion);
+  findOneById(@Param('id', ParseIntPipe) idIntervencion: number) {
+    return this.IntervencionService.findIntervencionById(idIntervencion);
   }
 
   @Patch(':idIntervencion')
@@ -47,9 +48,12 @@ export class IntervencionController {
     return this.IntervencionService.delete(idIntervencion);
   }
 
-  /* filter( interventionDTO: any){
-       console.log(interventionDTO);
-     return this.IntervencionService.filterAux(interventionDTO);  
-   } 
-*/
+  @Post('/intervencion')
+  async getInterventionsApi(
+    @Body() chargeInterventionDto: ChargeInterventionDto,
+  ) {
+    return this.IntervencionService.fetchInterventionsFromApi(
+      chargeInterventionDto,
+    );
+  }
 }

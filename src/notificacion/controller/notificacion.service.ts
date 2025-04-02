@@ -67,6 +67,21 @@ export class NotificacionService {
       await this.repositoryNotification.delete(id_notificacion);
     } else return new BadRequestException('Notificación no existe');
   }
+
+  async markAllAsRead(id_consultor: number) {
+    const notifications = await this.repositoryNotification.find({
+      where: { consultor: { id_consultor: id_consultor }, isRead: false },
+    });
+
+    if (notifications.length > 0) {
+      notifications.forEach((notification) => {
+        notification.isRead = true;
+      });
+      await this.repositoryNotification.save(notifications);
+    }
+    return;
+  }
+
   async createNotificacion(
     notificacionData: NotificacionDto,
     idConsultor: number,
