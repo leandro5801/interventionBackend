@@ -87,6 +87,7 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
 
   async fetchAreaFromApi() {
     let projects: [];
+    let returnData: Proyecto[] = [];
     const processedData: {
       id_proyecto?: number;
       nombre_proyecto: string;
@@ -109,14 +110,15 @@ removeIntervencion(id: number): Promise<{ affected?: number }> {
       });
 
       if (!existentProject) {
-        await this.proyectoRepository.save({
+        const newProject = await this.proyectoRepository.save({
           id_proyecto: undefined,
           nombre_proyecto: nameProject,
           tipo_proyecto: typeProject,
           cargar_proyecto: true,
         });
+        returnData.push(newProject as Proyecto);
       }
     }
-    return this.proyectoRepository.find({ where: { cargar_proyecto: true } });
+    return returnData;
   }
 }
