@@ -22,52 +22,82 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+# Sistema de Gestión de Intervenciones - Backend
 
-```bash
-$ npm install
-```
+## Descripción
 
-## Running the app
+Este es el backend del sistema de gestión de intervenciones para una consultoría tecnológica. Está desarrollado con NestJS y utiliza PostgreSQL como base de datos. Proporciona una API REST para gestionar intervenciones, proyectos, recomendaciones, usuarios, roles, notificaciones y la estructura organizativa.
 
-```bash
-# development
-$ npm run start
+## Instalación
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
+1. Clonar el repositorio.
+2. Navegar al directorio del backend:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cd interventionBackendTesis
 ```
 
-## Support
+3. Instalar las dependencias:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+npm install
+```
 
-## Stay in touch
+## Configuración
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Asegúrese de tener PostgreSQL instalado y configurado. La configuración de conexión a la base de datos se encuentra en `src/app.module.ts`. Modifique los parámetros de conexión (host, puerto, usuario, contraseña, nombre de la base de datos) según su entorno.
 
-## License
+## Ejecución
 
-Nest is [MIT licensed](LICENSE).
+Para iniciar el servidor en modo desarrollo:
+
+```bash
+npm run start:dev
+```
+
+Para producción:
+
+```bash
+npm run start:prod
+```
+
+## Pruebas
+
+Ejecutar pruebas unitarias:
+
+```bash
+npm run test
+```
+
+Ejecutar pruebas end-to-end:
+
+```bash
+npm run test:e2e
+```
+
+## Uso
+
+El backend expone endpoints para gestionar:
+
+- Intervenciones
+- Proyectos
+- Recomendaciones
+- Usuarios y roles
+- Notificaciones
+- Estructura organizativa (áreas, direcciones, UEBs, etc.)
+
+Se recomienda usar herramientas como Postman o integrar con el frontend para consumir la API.
+
+## Tecnologías
+
+- NestJS
+- TypeScript
+- PostgreSQL
+- TypeORM
+
+## Licencia
+
+Este proyecto está bajo licencia MIT.
+
